@@ -5,7 +5,7 @@ Just a worm project for a class.
 
 Contributors: 
 Kevin Lopez
-Yujin C
+Yujin Chung
 Yu Li
 Desirae Prather
 
@@ -46,3 +46,4 @@ ip dhcp excluded-address 192.168.1.1
 exit
 
 sh ip dhcp  bind
+

