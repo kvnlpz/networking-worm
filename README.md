@@ -3,17 +3,17 @@ Just a worm project for a class.
 
 
 Contributors: 
-Kevin Lopez
-Yujin Chung
-Yu Li
-Desirae Prather
+Kevin Lopez, 
+Yujin Chung, 
+Yu Li, 
+Desirae Prather, 
 
 <!-- # Install pip for python 3 VM instructions -->
-how to set up Python3 in VMS
+How to set up Python3 in VMS:
 
 1. Check VM to make sure Network is set NAT
 2. open terminal
-3. enter "python --version" if show 2.7 do step 3,4,5,6
+3. enter "python --version" if show version 2.7 do step 3,4,5,6
 4. enter "sudo su" (if asked for password put cpsc)
 5. enter "update-alternatives --install /usr/bin/python python /usr/bin/python3 1"
 6. python --version if show 3.x then proceed to next step otherwise message in discord
@@ -25,6 +25,8 @@ how to set up Python3 in VMS
 repeat steps for the other 2 vm
 
 <!-- # Execution Instructions -->
+How to execute worm.py with Python:
+
 1. config router's ip and dhcp
 2. Enter command "sh ip dhcp bind" into router until 3 ips show
 3. Enter "dhcp" into PC1
@@ -34,3 +36,4 @@ repeat steps for the other 2 vm
 7. open terminal 
 8. enter "cp Desktop/worm.py /tmp"
 9. enter "python3 /tmp/worm.py"
+10. Check all tmp folders to see if the infected file spread.
