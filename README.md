@@ -27,6 +27,9 @@ repeat steps for the other 2 vm
 1. config router's ip and dhcp
 2. Enter command "sh ip dhcp bind" into router until 3 ips show
 3. Enter "dhcp" into PC1
-4. Check to see that all of them have been assigned a ip address 
-5. go to Lubuntu 
-6. 
+4. Check to see that all of them have been assigned a ip address from dhcp
+5. go to a Lubuntu vm
+6. create a note and copy our code into it and save it as "worm.py" onto Desktop
+7. open terminal 
+8. enter "cp Desktop/worm.py /tmp"
+9. enter "python3 /tmp/worm.py"
