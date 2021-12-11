@@ -275,7 +275,7 @@ networkHosts = getHostsOnTheSameNetwork()
 
 try:
 	networkHosts.remove(currentIP)
-	networkHosts.remove('10.0.0.1')
+	#networkHosts.remove('10.0.0.1')
 except ValueError:
 	print("we got a value error but go on...")
 
