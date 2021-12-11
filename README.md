@@ -21,8 +21,7 @@ How to set up Python3 in VMS:
 8. enter "python --version" (check to see if it is now python 3.x)
 9. enter "pip3 install -U pip setuptools"
 10. enter "pip3 install paramiko netifaces python-nmap netinfo"
-
-repeat steps for the other 2 vm
+11. repeat steps for the other 2 vm
 
 <!-- # Execution Instructions -->
 How to execute worm.py with Python:
@@ -34,6 +33,6 @@ How to execute worm.py with Python:
 5. go to a Lubuntu vm
 6. create a note and copy our code into it and save it as "worm.py" onto Desktop
 7. open terminal 
-8. enter "cp Desktop/worm.py /tmp"
-9. enter "python3 /tmp/worm.py"
-10. Check all tmp folders to see if the infected file spread.
+8. enter "cp Desktop/worm.py /tmp" (Or just copy the worm.py from the Desktop folder to the tmp folder via copy & paste).
+9. enter "python3 /tmp/worm.py" (Execute worm.py in the tmp folder. If location is in "/tmp" directory in terminal, enter "python3 worm.py" instead).
+10. Check all tmp folders to see if the infected file spread. (Enter "ls /tmp" to check what's in the tmp directory). 
